@@ -8,8 +8,8 @@ import sys
 import os
 
 CURRENT_VERSION = "0.0.1"
-UPDATE_VERSION_URL = "https://yourserver.com/erky_version.txt"  # Put your online version URL here
-UPDATE_SCRIPT_URL = "https://yourserver.com/erky_latest.py"    # Put your online raw script URL here
+UPDATE_VERSION_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky_version.txt"
+UPDATE_SCRIPT_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky.py"
 SCRIPT_PATH = os.path.realpath(__file__)
 
 # Intro loading screen
@@ -60,7 +60,7 @@ def check_for_update():
         print(f"Update check failed: {e}")
 
 def run_erky_gui():
-    check_for_update()  # <-- Added update check here
+    check_for_update()  # <-- Update checker added here, nothing else changed
 
     root = tk.Tk()
     root.title("Erky alpha 0.0.1")
