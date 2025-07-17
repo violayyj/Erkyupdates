@@ -212,7 +212,7 @@ def run_erky_gui():
     create_button("3. IP Geolocalizer", ip_geolocation).pack(pady=5)
     create_button("4. Clear Output", clear_output).pack(pady=5)
     create_button("5. Nexfil (Username Profile Search)", nexfil_lookup).pack(pady=5)
-    create_button("6. Check for Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
+    create_button("6. Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
     create_button("7. Exit", root.destroy).pack(pady=15)
 
     root.mainloop()
