@@ -40,28 +40,26 @@ def show_intro(callback):
     animate()
     intro.mainloop()
 
-def check_for_update():
+def check_for_update_gui(update_info_window):
     try:
         response = requests.get(UPDATE_VERSION_URL, timeout=5)
         if response.status_code == 200:
             remote_version = response.text.strip()
             if remote_version > CURRENT_VERSION:
-                print(f"Update found: {remote_version}. Downloading new version...")
+                update_info_window(f"Update found: {remote_version}. Downloading new version...")
                 new_script = requests.get(UPDATE_SCRIPT_URL, timeout=10).text
                 with open(SCRIPT_PATH, "w", encoding="utf-8") as f:
                     f.write(new_script)
-                print("Update downloaded. Please restart the program.")
+                update_info_window("Update downloaded. Please restart the program.")
                 sys.exit(0)
             else:
-                print("No update found.")
+                update_info_window("No update found.")
         else:
-            print("Could not check for updates.")
+            update_info_window("Could not check for updates.")
     except Exception as e:
-        print(f"Update check failed: {e}")
+        update_info_window(f"Update check failed: {e}")
 
 def run_erky_gui():
-    check_for_update()  # <-- Update checker added here, nothing else changed
-
     root = tk.Tk()
     root.title("Erky alpha 0.0.1")
     root.geometry("550x700")
@@ -209,12 +207,14 @@ def run_erky_gui():
         except Exception as e:
             update_info_window(f"[Nexfil] Error: {e}")
 
+    # Create buttons exactly as before, but add Update button
     create_button("1. NumVerify (Phone Info)", phone_info_lookup).pack(pady=5)
     create_button("2. Whois Lookup (domain)", whois_lookup).pack(pady=5)
     create_button("3. IP Geolocalizer", ip_geolocation).pack(pady=5)
     create_button("4. Clear Output", clear_output).pack(pady=5)
     create_button("5. Nexfil (Username Profile Search)", nexfil_lookup).pack(pady=5)
-    create_button("6. Exit", root.destroy).pack(pady=15)
+    create_button("6. Check for Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
+    create_button("7. Exit", root.destroy).pack(pady=15)
 
     root.mainloop()
 
