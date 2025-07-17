@@ -207,7 +207,6 @@ def run_erky_gui():
         except Exception as e:
             update_info_window(f"[Nexfil] Error: {e}")
 
-    # Create buttons exactly as before, but add Update button
     create_button("1. NumVerify (Phone Info)", phone_info_lookup).pack(pady=5)
     create_button("2. Whois Lookup (domain)", whois_lookup).pack(pady=5)
     create_button("3. IP Geolocalizer", ip_geolocation).pack(pady=5)
