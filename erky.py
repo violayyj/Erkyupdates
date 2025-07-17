@@ -7,7 +7,7 @@ import subprocess
 import sys
 import os
 
-CURRENT_VERSION = "0.0.1"
+CURRENT_VERSION = "0.0.2"
 UPDATE_VERSION_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky_version.txt"
 UPDATE_SCRIPT_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky.py"
 SCRIPT_PATH = os.path.realpath(__file__)
@@ -61,14 +61,14 @@ def check_for_update_gui(update_info_window):
 
 def run_erky_gui():
     root = tk.Tk()
-    root.title("Erky alpha 0.0.1")
+    root.title("Erky alpha 0.0.2")
     root.geometry("550x700")
     root.configure(bg="black")
 
     heading_font = tkfont.Font(family="Consolas", size=18, weight="bold")
     text_font = tkfont.Font(family="Consolas", size=10)
 
-    title_label = tk.Label(root, text="ERKY alpha 0.0.1", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
+    title_label = tk.Label(root, text="ERKY alpha 0.0.2", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
     title_label.pack(pady=(10, 5))
 
     canvas = tk.Canvas(root, bg="black", highlightthickness=0)
