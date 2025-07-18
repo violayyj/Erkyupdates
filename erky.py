@@ -7,7 +7,7 @@ import subprocess
 import sys
 import os
 
-CURRENT_VERSION = "0.0.3"
+CURRENT_VERSION = "0.0.4"
 UPDATE_VERSION_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky_version.txt"
 UPDATE_SCRIPT_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky.py"
 SCRIPT_PATH = os.path.realpath(__file__)
@@ -61,14 +61,14 @@ def check_for_update_gui(update_info_window):
 
 def run_erky_gui():
     root = tk.Tk()
-    root.title("ERKY alpha 0.0.3")
+    root.title("ERKY alpha 0.0.4")
     root.geometry("550x700")
     root.configure(bg="black")
 
     heading_font = tkfont.Font(family="Consolas", size=18, weight="bold")
     text_font = tkfont.Font(family="Consolas", size=10)
 
-    title_label = tk.Label(root, text="ERKY alpha 0.0.3", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
+    title_label = tk.Label(root, text="ERKY alpha 0.0.4", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
     title_label.pack(pady=(10, 5))
 
     canvas = tk.Canvas(root, bg="black", highlightthickness=0)
@@ -102,6 +102,11 @@ def run_erky_gui():
         info_text.configure(state='normal')
         info_text.delete(1.0, tk.END)
         info_text.configure(state='disabled')
+
+    def copy_output():
+        root.clipboard_clear()
+        root.clipboard_append(info_text.get(1.0, tk.END).strip())
+        root.update()  # now it stays on the clipboard after the window is closed
 
     tk.Label(scroll_frame, text="Phone Num, Domain or IP:", fg="white", bg="black", font=heading_font).pack(pady=10)
     entry = tk.Entry(scroll_frame, font=text_font, width=45, bg="#1e1e1e", fg="white", insertbackground="white", relief="flat")
@@ -228,7 +233,8 @@ def run_erky_gui():
     create_button("5. Nexfil (Username Profile Search)", nexfil_lookup).pack(pady=5)
     create_button("6. Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
     create_button("7. Link Shortener", shorten_link).pack(pady=5)
-    create_button("8. Exit", root.destroy).pack(pady=15)
+    create_button("8. Copy Output", copy_output).pack(pady=5)
+    create_button("9. Exit", root.destroy).pack(pady=15)
 
     root.mainloop()
 
