@@ -7,7 +7,7 @@ import subprocess
 import sys
 import os
 
-CURRENT_VERSION = "0.0.2"
+CURRENT_VERSION = "0.0.3"
 UPDATE_VERSION_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky_version.txt"
 UPDATE_SCRIPT_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky.py"
 SCRIPT_PATH = os.path.realpath(__file__)
@@ -61,14 +61,14 @@ def check_for_update_gui(update_info_window):
 
 def run_erky_gui():
     root = tk.Tk()
-    root.title("Erky alpha 0.0.2")
+    root.title("ERKY alpha 0.0.3")
     root.geometry("550x700")
     root.configure(bg="black")
 
     heading_font = tkfont.Font(family="Consolas", size=18, weight="bold")
     text_font = tkfont.Font(family="Consolas", size=10)
 
-    title_label = tk.Label(root, text="ERKY alpha 0.0.2", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
+    title_label = tk.Label(root, text="ERKY alpha 0.0.3", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
     title_label.pack(pady=(10, 5))
 
     canvas = tk.Canvas(root, bg="black", highlightthickness=0)
@@ -192,7 +192,6 @@ def run_erky_gui():
             return
         update_info_window("Scanning in progress...")
         try:
-            # Run nexfil subprocess; requires nexfil installed in environment
             result = subprocess.run(['nexfil', '-u', user], capture_output=True, text=True, timeout=30)
             if result.returncode == 0:
                 output = result.stdout.strip()
@@ -207,13 +206,29 @@ def run_erky_gui():
         except Exception as e:
             update_info_window(f"[Nexfil] Error: {e}")
 
+    def shorten_link():
+        url = entry.get().strip()
+        if not url:
+            update_info_window("[Shortener] Please enter a URL.")
+            return
+        try:
+            res = requests.get(f"https://is.gd/create.php?format=simple&url={url}", timeout=5)
+            if res.status_code == 200:
+                short_url = res.text.strip()
+                update_info_window(f"[Shortener] Shortened URL:\n{short_url}")
+            else:
+                update_info_window("[Shortener] Failed to shorten URL.")
+        except Exception as e:
+            update_info_window(f"[Shortener] Error: {e}")
+
     create_button("1. NumVerify (Phone Info)", phone_info_lookup).pack(pady=5)
     create_button("2. Whois Lookup (domain)", whois_lookup).pack(pady=5)
     create_button("3. IP Geolocalizer", ip_geolocation).pack(pady=5)
     create_button("4. Clear Output", clear_output).pack(pady=5)
     create_button("5. Nexfil (Username Profile Search)", nexfil_lookup).pack(pady=5)
     create_button("6. Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
-    create_button("7. Exit", root.destroy).pack(pady=15)
+    create_button("7. Link Shortener", shorten_link).pack(pady=5)
+    create_button("8. Exit", root.destroy).pack(pady=15)
 
     root.mainloop()
 
