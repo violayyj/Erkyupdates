@@ -19,23 +19,71 @@ def show_intro(callback):
     intro.configure(bg="black")
     intro.attributes("-fullscreen", True)
 
-    label = tk.Label(intro, text=":: ERKY SYSTEM BOOTING UP ::", fg="white", bg="black", font=("Consolas", 28))
-    label.pack(pady=60)
+    # Create a canvas to draw background logo and hold content centered
+    canvas = tk.Canvas(intro, bg="black", highlightthickness=0)
+    canvas.pack(fill="both", expand=True)
 
-    loading_frame = tk.Frame(intro, bg="black")
+    width = intro.winfo_screenwidth()
+    height = intro.winfo_screenheight()
+
+    # Draw subtle doxbin demon logo (stylized simple vector shape)
+    # This is a rough symbolic demon head shape with purple neon glow effect
+
+    # Outer glow - multiple layers of purple ovals for glow effect
+    glow_color = "#7B3FBF"  # neon purple lighter
+    for glow_radius in range(200, 270, 10):
+        canvas.create_oval(
+            width//2 - glow_radius, height//2 - glow_radius,
+            width//2 + glow_radius, height//2 + glow_radius,
+            outline=glow_color, width=2, stipple="gray25"
+        )
+
+    # Demon head basic shape (triangle horned face)
+    points = [
+        width//2, height//2 - 80,  # top center (horn tip)
+        width//2 - 100, height//2 + 70,  # bottom left
+        width//2 + 100, height//2 + 70   # bottom right
+    ]
+    canvas.create_polygon(points, fill="#5D3A85", outline="#A066FF", width=3)
+
+    # Eyes - neon purple glowing circles
+    eye_radius = 15
+    eye_y = height//2 - 20
+    eye_x_offset = 40
+    canvas.create_oval(width//2 - eye_x_offset - eye_radius, eye_y - eye_radius,
+                       width//2 - eye_x_offset + eye_radius, eye_y + eye_radius,
+                       fill="#A066FF", outline="#D1A3FF", width=2)
+    canvas.create_oval(width//2 + eye_x_offset - eye_radius, eye_y - eye_radius,
+                       width//2 + eye_x_offset + eye_radius, eye_y + eye_radius,
+                       fill="#A066FF", outline="#D1A3FF", width=2)
+
+    # Center container frame for text and loading bar
+    container = tk.Frame(intro, bg="black")
+    container.place(relx=0.5, rely=0.65, anchor="center")  # a bit lower to center with logo
+
+    neon_purple = "#A066FF"
+
+    label = tk.Label(container, text="ERKY OSINT TOOL BY VIOLA", fg=neon_purple, bg="black", font=("Consolas", 36, "bold"))
+    label.pack(pady=(0, 40))
+
+    loading_frame = tk.Frame(container, bg="black")
     loading_frame.pack()
 
     loading_bar = tk.Canvas(loading_frame, width=600, height=30, bg="gray25", highlightthickness=0)
     loading_bar.pack()
-    fill = loading_bar.create_rectangle(0, 0, 0, 30, fill="#00ffff", width=0)
+    fill = loading_bar.create_rectangle(0, 0, 0, 30, fill=neon_purple, width=0)
 
     def animate(i=0):
-        if i > 600:
+        if i >= 600:
             intro.destroy()
             callback()
             return
         loading_bar.coords(fill, 0, 0, i, 30)
-        intro.after(15, animate, i + 5)
+        # subtle pulsating neon effect on loading bar color
+        brightness = 170 + int(85 * (i / 600))
+        color = f"#A0{brightness:02X}FF"
+        loading_bar.itemconfig(fill, fill=color)
+        intro.after(12, animate, i + 5)
 
     animate()
     intro.mainloop()
@@ -65,7 +113,7 @@ def open_notes_window():
     notes_win.geometry("600x500")
     notes_win.configure(bg="black")
 
-    text_area = scrolledtext.ScrolledText(notes_win, wrap=tk.WORD, bg="black", fg="white", insertbackground="white",
+    text_area = scrolledtext.ScrolledText(notes_win, wrap=tk.WORD, bg="black", fg="#5D3A85", insertbackground="#5D3A85",
                                           font=("Consolas", 12))
     text_area.pack(expand=True, fill="both", padx=10, pady=10)
 
@@ -81,27 +129,39 @@ def open_notes_window():
     btn_frame = tk.Frame(notes_win, bg="black")
     btn_frame.pack(pady=5)
 
-    tk.Button(btn_frame, text="Save", command=save_note, bg="#111111", fg="#00ff00", width=15).pack(side="left", padx=10)
-    tk.Button(btn_frame, text="Clear", command=clear_note, bg="#111111", fg="#ff0000", width=15).pack(side="right", padx=10)
+    tk.Button(btn_frame, text="Save", command=save_note, bg="#D1A3FF", fg="#5D3A85", width=15).pack(side="left", padx=10)
+    tk.Button(btn_frame, text="Clear", command=clear_note, bg="#D1A3FF", fg="#5D3A85", width=15).pack(side="right", padx=10)
 
 def run_erky_gui():
     root = tk.Tk()
     root.title("ERKY alpha 1.0.0")
-    root.geometry("550x700")
+    root.geometry("600x750")
     root.configure(bg="black")
 
     heading_font = tkfont.Font(family="Consolas", size=18, weight="bold")
     text_font = tkfont.Font(family="Consolas", size=10)
 
-    title_label = tk.Label(root, text="ERKY alpha 1.0.0", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
+    # Colors
+    dark_purple = "#5D3A85"
+    neon_purple = "#A066FF"
+    light_purple = "#D1A3FF"
+    lime = "lime"
+
+    title_label = tk.Label(root, text="ERKY alpha 1.0.0", fg=neon_purple, bg="black", font=("Consolas", 24, "bold"))
     title_label.pack(pady=(10, 0))
 
-    subtitle_label = tk.Label(root, text="made by viola", fg="#00ffff", bg="black", font=("Consolas", 14))
+    subtitle_label = tk.Label(root, text="made by viola", fg=neon_purple, bg="black", font=("Consolas", 14))
     subtitle_label.pack(pady=(0, 5))
 
     canvas = tk.Canvas(root, bg="black", highlightthickness=0)
     scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
     scroll_frame = tk.Frame(canvas, bg="black")
+
+    def on_mousewheel(event):
+        canvas.yview_scroll(-1 * int(event.delta / 120), "units")
+
+    # Bind mousewheel to scroll the canvas
+    canvas.bind_all("<MouseWheel>", on_mousewheel)
 
     scroll_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
 
@@ -115,7 +175,7 @@ def run_erky_gui():
     info_label.pack(pady=(10, 5))
 
     info_text = scrolledtext.ScrolledText(scroll_frame, width=65, height=20, wrap=tk.WORD, font=text_font,
-                                          bg="black", fg="lime", state='disabled')
+                                          bg="black", fg=lime, state='disabled')
     info_text.pack(pady=5)
 
     def update_info_window(text):
@@ -134,13 +194,13 @@ def run_erky_gui():
         root.clipboard_append(info_text.get(1.0, tk.END).strip())
         root.update()
 
-    tk.Label(scroll_frame, text="Phone Num, Domain or IP:", fg="white", bg="black", font=heading_font).pack(pady=10)
-    entry = tk.Entry(scroll_frame, font=text_font, width=45, bg="#1e1e1e", fg="white", insertbackground="white", relief="flat")
+    tk.Label(scroll_frame, text="Phone Num, Domain or IP:", fg=neon_purple, bg="black", font=heading_font).pack(pady=10)
+    entry = tk.Entry(scroll_frame, font=text_font, width=45, bg=light_purple, fg=dark_purple, insertbackground=dark_purple, relief="flat")
     entry.pack(pady=5, ipady=5)
 
     def create_button(text, command):
-        return tk.Button(scroll_frame, text=text, command=command, bg="#111111", fg="#00ffff",
-                         activebackground="#333333", activeforeground="#00ffff", font=text_font, relief="raised", bd=3, width=35, height=2)
+        return tk.Button(scroll_frame, text=text, command=command, bg=light_purple, fg=dark_purple,
+                         activebackground=dark_purple, activeforeground=neon_purple, font=text_font, relief="raised", bd=3, width=35, height=2)
 
     def phone_info_lookup():
         phone = entry.get().strip()
