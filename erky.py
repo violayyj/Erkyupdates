@@ -7,7 +7,7 @@ import subprocess
 import sys
 import os
 
-CURRENT_VERSION = "0.0.7"
+CURRENT_VERSION = "1.0.0"
 UPDATE_VERSION_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky_version.txt"
 UPDATE_SCRIPT_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky.py"
 SCRIPT_PATH = os.path.realpath(__file__)
@@ -86,14 +86,14 @@ def open_notes_window():
 
 def run_erky_gui():
     root = tk.Tk()
-    root.title("ERKY alpha 0.0.7")
+    root.title("ERKY alpha 1.0.0")
     root.geometry("550x700")
     root.configure(bg="black")
 
     heading_font = tkfont.Font(family="Consolas", size=18, weight="bold")
     text_font = tkfont.Font(family="Consolas", size=10)
 
-    title_label = tk.Label(root, text="ERKY alpha 0.0.7", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
+    title_label = tk.Label(root, text="ERKY alpha 1.0.0", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
     title_label.pack(pady=(10, 0))
 
     subtitle_label = tk.Label(root, text="made by viola", fg="#00ffff", bg="black", font=("Consolas", 14))
@@ -285,16 +285,14 @@ def run_erky_gui():
     create_button("3. IP Geolocalizer", ip_geolocation).pack(pady=5)
     create_button("4. Clear Output", clear_output).pack(pady=5)
     create_button("5. Nexfil (Username Profile Search)", nexfil_lookup).pack(pady=5)
-    create_button("6. Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
+    create_button("6. Domains on Same IP", same_ip_domains).pack(pady=5)
     create_button("7. Link Shortener", shorten_link).pack(pady=5)
     create_button("8. Copy Output", copy_output).pack(pady=5)
     create_button("9. Notes", open_notes_window).pack(pady=5)
-
     create_button("10. Port Scan Preview", port_scan).pack(pady=5)
     create_button("11. URL Scan Preview", url_scan_preview).pack(pady=5)
     create_button("12. Reverse IP Lookup", reverse_ip_lookup).pack(pady=5)
-    create_button("13. Domains on Same IP", same_ip_domains).pack(pady=5)
-
+    create_button("13. Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
     create_button("14. Exit", root.destroy).pack(pady=15)
 
     root.mainloop()
