@@ -134,7 +134,7 @@ def open_notes_window():
 
 def run_erky_gui():
     root = tk.Tk()
-    root.title("ERKY alpha 1.0.0")
+    root.title("ERKY beta 1.0.0")
     root.geometry("600x750")
     root.configure(bg="black")
 
@@ -147,7 +147,7 @@ def run_erky_gui():
     light_purple = "#D1A3FF"
     lime = "lime"
 
-    title_label = tk.Label(root, text="ERKY alpha 1.0.0", fg=neon_purple, bg="black", font=("Consolas", 24, "bold"))
+    title_label = tk.Label(root, text="ERKY beta 1.0.0", fg=neon_purple, bg="black", font=("Consolas", 24, "bold"))
     title_label.pack(pady=(10, 0))
 
     subtitle_label = tk.Label(root, text="made by viola", fg=neon_purple, bg="black", font=("Consolas", 14))
@@ -171,7 +171,7 @@ def run_erky_gui():
     canvas.pack(side="left", fill="both", expand=True)
     scrollbar.pack(side="right", fill="y")
 
-    info_label = tk.Label(scroll_frame, text="Infos Output", fg="white", bg="black", font=heading_font)
+    info_label = tk.Label(scroll_frame, text="Infos Output", fg=neon_purple, bg="black", font=heading_font)
     info_label.pack(pady=(10, 5))
 
     info_text = scrolledtext.ScrolledText(scroll_frame, width=65, height=20, wrap=tk.WORD, font=text_font,
