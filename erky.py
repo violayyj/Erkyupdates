@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import font as tkfont, scrolledtext
+from tkinter import font as tkfont, scrolledtext, filedialog
 import phonenumbers
 from phonenumbers import carrier, geocoder
 import requests
@@ -7,7 +7,7 @@ import subprocess
 import sys
 import os
 
-CURRENT_VERSION = "0.0.5"
+CURRENT_VERSION = "0.0.6"
 UPDATE_VERSION_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky_version.txt"
 UPDATE_SCRIPT_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky.py"
 SCRIPT_PATH = os.path.realpath(__file__)
@@ -59,16 +59,41 @@ def check_for_update_gui(update_info_window):
     except Exception as e:
         update_info_window(f"Update check failed: {e}")
 
+def open_notes_window():
+    notes_win = tk.Toplevel()
+    notes_win.title("Erky Notes")
+    notes_win.geometry("600x500")
+    notes_win.configure(bg="black")
+
+    text_area = scrolledtext.ScrolledText(notes_win, wrap=tk.WORD, bg="black", fg="white", insertbackground="white",
+                                          font=("Consolas", 12))
+    text_area.pack(expand=True, fill="both", padx=10, pady=10)
+
+    def save_note():
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text Files", "*.txt")])
+        if file_path:
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(text_area.get("1.0", tk.END).strip())
+
+    def clear_note():
+        text_area.delete("1.0", tk.END)
+
+    btn_frame = tk.Frame(notes_win, bg="black")
+    btn_frame.pack(pady=5)
+
+    tk.Button(btn_frame, text="Save", command=save_note, bg="#111111", fg="#00ff00", width=15).pack(side="left", padx=10)
+    tk.Button(btn_frame, text="Clear", command=clear_note, bg="#111111", fg="#ff0000", width=15).pack(side="right", padx=10)
+
 def run_erky_gui():
     root = tk.Tk()
-    root.title("ERKY alpha 0.0.5")
+    root.title("ERKY alpha 0.0.6")
     root.geometry("550x700")
     root.configure(bg="black")
 
     heading_font = tkfont.Font(family="Consolas", size=18, weight="bold")
     text_font = tkfont.Font(family="Consolas", size=10)
 
-    title_label = tk.Label(root, text="ERKY alpha 0.0.5", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
+    title_label = tk.Label(root, text="ERKY alpha 0.0.6", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
     title_label.pack(pady=(10, 5))
 
     canvas = tk.Canvas(root, bg="black", highlightthickness=0)
@@ -234,7 +259,8 @@ def run_erky_gui():
     create_button("6. Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
     create_button("7. Link Shortener", shorten_link).pack(pady=5)
     create_button("8. Copy Output", copy_output).pack(pady=5)
-    create_button("9. Exit", root.destroy).pack(pady=15)
+    create_button("9. Notes", open_notes_window).pack(pady=5)
+    create_button("10. Exit", root.destroy).pack(pady=15)
 
     root.mainloop()
 
