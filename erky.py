@@ -7,7 +7,7 @@ import subprocess
 import sys
 import os
 
-CURRENT_VERSION = "0.0.6"
+CURRENT_VERSION = "0.0.7"
 UPDATE_VERSION_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky_version.txt"
 UPDATE_SCRIPT_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky.py"
 SCRIPT_PATH = os.path.realpath(__file__)
@@ -86,23 +86,24 @@ def open_notes_window():
 
 def run_erky_gui():
     root = tk.Tk()
-    root.title("ERKY alpha 0.0.6")
+    root.title("ERKY alpha 0.0.7")
     root.geometry("550x700")
     root.configure(bg="black")
 
     heading_font = tkfont.Font(family="Consolas", size=18, weight="bold")
     text_font = tkfont.Font(family="Consolas", size=10)
 
-    title_label = tk.Label(root, text="ERKY alpha 0.0.6", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
-    title_label.pack(pady=(10, 5))
+    title_label = tk.Label(root, text="ERKY alpha 0.0.7", fg="#00ffff", bg="black", font=("Consolas", 24, "bold"))
+    title_label.pack(pady=(10, 0))
+
+    subtitle_label = tk.Label(root, text="made by viola", fg="#00ffff", bg="black", font=("Consolas", 14))
+    subtitle_label.pack(pady=(0, 5))
 
     canvas = tk.Canvas(root, bg="black", highlightthickness=0)
     scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
     scroll_frame = tk.Frame(canvas, bg="black")
 
-    scroll_frame.bind(
-        "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
-    )
+    scroll_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
 
     canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
     canvas.configure(yscrollcommand=scrollbar.set)
@@ -251,6 +252,34 @@ def run_erky_gui():
         except Exception as e:
             update_info_window(f"[Shortener] Error: {e}")
 
+    def port_scan():
+        target = entry.get().strip()
+        if target:
+            update_info_window(f"[Port Scan Preview] https://yougetsignal.com/tools/open-ports/?remoteAddress={target}")
+        else:
+            update_info_window("[Port Scan] Please enter a domain or IP.")
+
+    def url_scan_preview():
+        url = entry.get().strip()
+        if url:
+            update_info_window(f"[URL Scan Preview] https://urlscan.io/search/#domain:{url}")
+        else:
+            update_info_window("[URL Scan] Please enter a URL.")
+
+    def reverse_ip_lookup():
+        ip = entry.get().strip()
+        if ip:
+            update_info_window(f"[Reverse IP Lookup] https://viewdns.info/reverseip/?host={ip}")
+        else:
+            update_info_window("[Reverse IP Lookup] Please enter an IP.")
+
+    def same_ip_domains():
+        target = entry.get().strip()
+        if target:
+            update_info_window(f"[Domains on Same IP] https://dnslytics.com/reverse-ip/{target}")
+        else:
+            update_info_window("[Domains on Same IP] Please enter a domain.")
+
     create_button("1. NumVerify (Phone Info)", phone_info_lookup).pack(pady=5)
     create_button("2. Whois Lookup (domain)", whois_lookup).pack(pady=5)
     create_button("3. IP Geolocalizer", ip_geolocation).pack(pady=5)
@@ -260,11 +289,15 @@ def run_erky_gui():
     create_button("7. Link Shortener", shorten_link).pack(pady=5)
     create_button("8. Copy Output", copy_output).pack(pady=5)
     create_button("9. Notes", open_notes_window).pack(pady=5)
-    create_button("10. Exit", root.destroy).pack(pady=15)
+
+    create_button("10. Port Scan Preview", port_scan).pack(pady=5)
+    create_button("11. URL Scan Preview", url_scan_preview).pack(pady=5)
+    create_button("12. Reverse IP Lookup", reverse_ip_lookup).pack(pady=5)
+    create_button("13. Domains on Same IP", same_ip_domains).pack(pady=5)
+
+    create_button("14. Exit", root.destroy).pack(pady=15)
 
     root.mainloop()
 
 if __name__ == "__main__":
-    # Requires: pip install phonenumbers requests
-    # Also requires nexfil installed and available in PATH
     show_intro(run_erky_gui)
