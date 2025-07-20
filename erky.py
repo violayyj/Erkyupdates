@@ -318,8 +318,27 @@ def run_erky_gui():
         if not email:
             update_info_window("[Email Tracker] Please enter an email address.")
             return
-        update_info_window(f"[Email Tracker] Searching for email: {email}")
-        # Placeholder for real email tracker logic
+        update_info_window(f"[Email Tracker] Checking breaches for: {email} ...")
+        try:
+            url = f"https://haveibeenpwned-api.com/api/v2/breachedaccount/{email}"
+            resp = requests.get(url, timeout=10)
+            if resp.status_code == 200:
+                breaches = resp.json()
+                if breaches:
+                    update_info_window(f"[Email Tracker] Found {len(breaches)} breaches:")
+                    for breach in breaches:
+                        name = breach.get("Name", "N/A")
+                        domain = breach.get("Domain", "N/A")
+                        date = breach.get("BreachDate", "N/A")
+                        update_info_window(f" - {name} ({domain}), breached on {date}")
+                else:
+                    update_info_window("[Email Tracker] No breaches found.")
+            elif resp.status_code == 404:
+                update_info_window("[Email Tracker] No breaches found.")
+            else:
+                update_info_window(f"[Email Tracker] API Error: Status code {resp.status_code}")
+        except Exception as e:
+            update_info_window(f"[Email Tracker] Error: {e}")
 
     def instagram_info():
         username = entry.get().strip()
@@ -371,7 +390,6 @@ def run_erky_gui():
     create_button("11. URL Scan Preview", url_scan_preview).pack(pady=5)
     create_button("12. Reverse IP Lookup", reverse_ip_lookup).pack(pady=5)
     create_button("13. Email Tracker", email_tracker).pack(pady=5)
-    create_button("14. Instagram Info", instagram_info).pack(pady=5)
     create_button("14. Instagram Info", instagram_info).pack(pady=5)
     create_button("15. Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
     create_button("16. Exit", root.destroy).pack(pady=15)
