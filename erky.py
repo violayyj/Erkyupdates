@@ -7,46 +7,33 @@ import subprocess
 import sys
 import os
 
-CURRENT_VERSION = "1.0.0"
+CURRENT_VERSION = "beta 1.0.1"
 UPDATE_VERSION_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky_version.txt"
 UPDATE_SCRIPT_URL = "https://raw.githubusercontent.com/violayyj/Erkyupdates/main/erky.py"
 SCRIPT_PATH = os.path.realpath(__file__)
 
-# Intro loading screen
 def show_intro(callback):
     intro = tk.Tk()
     intro.title("Erky Boot")
     intro.configure(bg="black")
     intro.attributes("-fullscreen", True)
-
-    # Create a canvas to draw background logo and hold content centered
     canvas = tk.Canvas(intro, bg="black", highlightthickness=0)
     canvas.pack(fill="both", expand=True)
-
     width = intro.winfo_screenwidth()
     height = intro.winfo_screenheight()
-
-    # Draw subtle doxbin demon logo (stylized simple vector shape)
-    # This is a rough symbolic demon head shape with purple neon glow effect
-
-    # Outer glow - multiple layers of purple ovals for glow effect
-    glow_color = "#7B3FBF"  # neon purple lighter
+    glow_color = "#7B3FBF"
     for glow_radius in range(200, 270, 10):
         canvas.create_oval(
             width//2 - glow_radius, height//2 - glow_radius,
             width//2 + glow_radius, height//2 + glow_radius,
             outline=glow_color, width=2, stipple="gray25"
         )
-
-    # Demon head basic shape (triangle horned face)
     points = [
-        width//2, height//2 - 80,  # top center (horn tip)
-        width//2 - 100, height//2 + 70,  # bottom left
-        width//2 + 100, height//2 + 70   # bottom right
+        width//2, height//2 - 80,
+        width//2 - 100, height//2 + 70,
+        width//2 + 100, height//2 + 70
     ]
     canvas.create_polygon(points, fill="#5D3A85", outline="#A066FF", width=3)
-
-    # Eyes - neon purple glowing circles
     eye_radius = 15
     eye_y = height//2 - 20
     eye_x_offset = 40
@@ -56,19 +43,13 @@ def show_intro(callback):
     canvas.create_oval(width//2 + eye_x_offset - eye_radius, eye_y - eye_radius,
                        width//2 + eye_x_offset + eye_radius, eye_y + eye_radius,
                        fill="#A066FF", outline="#D1A3FF", width=2)
-
-    # Center container frame for text and loading bar
     container = tk.Frame(intro, bg="black")
-    container.place(relx=0.5, rely=0.65, anchor="center")  # a bit lower to center with logo
-
+    container.place(relx=0.5, rely=0.65, anchor="center")
     neon_purple = "#A066FF"
-
     label = tk.Label(container, text="ERKY OSINT TOOL BY VIOLA", fg=neon_purple, bg="black", font=("Consolas", 36, "bold"))
     label.pack(pady=(0, 40))
-
     loading_frame = tk.Frame(container, bg="black")
     loading_frame.pack()
-
     loading_bar = tk.Canvas(loading_frame, width=600, height=30, bg="gray25", highlightthickness=0)
     loading_bar.pack()
     fill = loading_bar.create_rectangle(0, 0, 0, 30, fill=neon_purple, width=0)
@@ -79,7 +60,6 @@ def show_intro(callback):
             callback()
             return
         loading_bar.coords(fill, 0, 0, i, 30)
-        # subtle pulsating neon effect on loading bar color
         brightness = 170 + int(85 * (i / 600))
         color = f"#A0{brightness:02X}FF"
         loading_bar.itemconfig(fill, fill=color)
@@ -112,7 +92,6 @@ def open_notes_window():
     notes_win.title("Erky Notes")
     notes_win.geometry("600x500")
     notes_win.configure(bg="black")
-
     text_area = scrolledtext.ScrolledText(notes_win, wrap=tk.WORD, bg="black", fg="#5D3A85", insertbackground="#5D3A85",
                                           font=("Consolas", 12))
     text_area.pack(expand=True, fill="both", padx=10, pady=10)
@@ -128,26 +107,24 @@ def open_notes_window():
 
     btn_frame = tk.Frame(notes_win, bg="black")
     btn_frame.pack(pady=5)
-
     tk.Button(btn_frame, text="Save", command=save_note, bg="#D1A3FF", fg="#5D3A85", width=15).pack(side="left", padx=10)
     tk.Button(btn_frame, text="Clear", command=clear_note, bg="#D1A3FF", fg="#5D3A85", width=15).pack(side="right", padx=10)
 
 def run_erky_gui():
     root = tk.Tk()
-    root.title("ERKY beta 1.0.0")
+    root.title("ERKY beta 1.0.1")
     root.geometry("600x750")
     root.configure(bg="black")
 
     heading_font = tkfont.Font(family="Consolas", size=18, weight="bold")
     text_font = tkfont.Font(family="Consolas", size=10)
 
-    # Colors
     dark_purple = "#5D3A85"
     neon_purple = "#A066FF"
     light_purple = "#D1A3FF"
     lime = "lime"
 
-    title_label = tk.Label(root, text="ERKY beta 1.0.0", fg=neon_purple, bg="black", font=("Consolas", 24, "bold"))
+    title_label = tk.Label(root, text="ERKY beta 1.0.1", fg=neon_purple, bg="black", font=("Consolas", 24, "bold"))
     title_label.pack(pady=(10, 0))
 
     subtitle_label = tk.Label(root, text="made by viola", fg=neon_purple, bg="black", font=("Consolas", 14))
@@ -160,14 +137,10 @@ def run_erky_gui():
     def on_mousewheel(event):
         canvas.yview_scroll(-1 * int(event.delta / 120), "units")
 
-    # Bind mousewheel to scroll the canvas
     canvas.bind_all("<MouseWheel>", on_mousewheel)
-
     scroll_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-
     canvas.create_window((0, 0), window=scroll_frame, anchor="nw")
     canvas.configure(yscrollcommand=scrollbar.set)
-
     canvas.pack(side="left", fill="both", expand=True)
     scrollbar.pack(side="right", fill="y")
 
@@ -340,6 +313,51 @@ def run_erky_gui():
         else:
             update_info_window("[Domains on Same IP] Please enter a domain.")
 
+    def email_tracker():
+        email = entry.get().strip()
+        if not email:
+            update_info_window("[Email Tracker] Please enter an email address.")
+            return
+        update_info_window(f"[Email Tracker] Searching for email: {email}")
+        # Placeholder for real email tracker logic
+
+    def instagram_info():
+        username = entry.get().strip()
+        if not username:
+            update_info_window("[Instagram Info] Please enter an Instagram username.")
+            return
+
+        update_info_window(f"[Instagram Info] Searching Instagram info for: {username}")
+
+        api_url = f"https://instagram.blanace.de/api/ig?username={username}"
+        try:
+            resp = requests.get(api_url, timeout=10)
+            if resp.status_code == 200:
+                data = resp.json()
+                if data.get("status") == "ok":
+                    user_data = data.get("user", {})
+                    full_name = user_data.get("full_name", "N/A")
+                    biography = user_data.get("biography", "N/A")
+                    followers = user_data.get("followers", "N/A")
+                    following = user_data.get("following", "N/A")
+                    posts = user_data.get("posts", "N/A")
+                    is_private = user_data.get("is_private", False)
+                    profile_url = f"https://instagram.com/{username}"
+
+                    update_info_window(f"Full Name: {full_name}")
+                    update_info_window(f"Biography: {biography}")
+                    update_info_window(f"Followers: {followers}")
+                    update_info_window(f"Following: {following}")
+                    update_info_window(f"Posts: {posts}")
+                    update_info_window(f"Private Account: {'Yes' if is_private else 'No'}")
+                    update_info_window(f"Profile URL: {profile_url}")
+                else:
+                    update_info_window(f"[Instagram Info] API response error or user not found.")
+            else:
+                update_info_window(f"[Instagram Info] Failed to fetch data (Status code: {resp.status_code}).")
+        except Exception as e:
+            update_info_window(f"[Instagram Info] Error: {e}")
+
     create_button("1. NumVerify (Phone Info)", phone_info_lookup).pack(pady=5)
     create_button("2. Whois Lookup (domain)", whois_lookup).pack(pady=5)
     create_button("3. IP Geolocalizer", ip_geolocation).pack(pady=5)
@@ -352,8 +370,11 @@ def run_erky_gui():
     create_button("10. Port Scan Preview", port_scan).pack(pady=5)
     create_button("11. URL Scan Preview", url_scan_preview).pack(pady=5)
     create_button("12. Reverse IP Lookup", reverse_ip_lookup).pack(pady=5)
-    create_button("13. Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
-    create_button("14. Exit", root.destroy).pack(pady=15)
+    create_button("13. Email Tracker", email_tracker).pack(pady=5)
+    create_button("14. Instagram Info", instagram_info).pack(pady=5)
+    create_button("14. Instagram Info", instagram_info).pack(pady=5)
+    create_button("15. Update", lambda: check_for_update_gui(update_info_window)).pack(pady=5)
+    create_button("16. Exit", root.destroy).pack(pady=15)
 
     root.mainloop()
 
